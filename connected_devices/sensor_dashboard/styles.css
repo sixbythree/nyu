@@ -169,6 +169,7 @@ body.dark-mode #chartS {
 .chart-container.single-chart {
     width: 80%;        /* Adjust the width when it's the only chart */
     min-width: 500px;  /* Adjust min width for the single chart */
+    min-height:1000px;
     padding-top: 20px;
     border-radius: 10px;
 }

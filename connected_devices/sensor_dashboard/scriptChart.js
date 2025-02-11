@@ -11,7 +11,7 @@ new Chart(ntx, {
              '7pm', '8pm', '9pm', '10pm', '11pm'
     ],
     datasets: [{
-        label: '# of People in Northern Floor',
+        label: '# of People in North Floor',
         data: [], //[12, 19, 3, 5, 2, 3],
         borderWidth: 1
     }]
@@ -42,7 +42,7 @@ new Chart(stx, {
              '7pm', '8pm', '9pm', '10pm', '11pm'
     ],
     datasets: [{
-        label: '# of People in Southern Floor',
+        label: '# of People in South Floor',
         data: [], //[12, 19, 3, 5, 2, 3],
         borderWidth: 1
     }]
