@@ -1,0 +1,117 @@
+h1, h2, #view div, #result{
+    text-align: center;
+}
+
+h1{
+    font-family: "Electrolize", sans-serif;
+    -webkit-text-stroke: .5px black;
+    
+}
+header {
+    display: flex;
+    justify-content: center;  /* Center the title */
+    align-items: center;
+    position: relative; /* So we can absolutely position the time */
+    width: 100%; /* Full width to ensure proper centering */
+}
+
+/* Styling the time */
+#current-time {
+    position: absolute; /* Positioning on the right */
+    right: 2px; /* Adding some space from the right edge */
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight:400;
+    background-color: white;
+    border-radius: 4px;
+}
+
+#dark-mode {
+    position: absolute; /* Positioning on the left */
+    left: 2px; /* Adding some space from the left edge */
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight:400;
+    background-color: black;
+    color:white;
+    border-radius: 4px;
+}
+
+
+body{
+    padding: 20px;
+    font-family: sans-serif;
+    background-color: #F7F7F7;
+}
+
+#view {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+#view div {
+    border: 1px solid black;
+    padding: 1px 8px;
+    font-size: 10;
+    font-weight: 100;
+}
+
+#view div:hover {
+    background-color: #2C057D;
+    color:white
+} 
+
+#result {
+    background-color: orange;
+    width: 600px;
+    overflow-wrap: anywhere;
+    font-size: 15;
+    font-weight: 100;
+}
+
+#result {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+} 
+
+#chartN {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;     /* Vertically centers the content */
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border: 1px solid #333;
+    width: 60%;
+    min-width: 700px;
+    height: 40%;           /* Height for the container */
+    min-height: 200px;
+    margin:0 auto;
+    overflow: hidden;
+}
+
+#chartS {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;     /* Vertically centers the content */
+    height: 400px;           /* Height for the container */
+    background-color: white;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 1px solid #333;
+    width: 60%;
+    min-width: 700px;
+    height: 40%;           /* Height for the container */
+    min-height: 200px;
+    margin:0 auto;
+    overflow: hidden;
+}
+
+
+#northF, #southF{
+    max-width: 85%;
+    max-height: 90%
+}

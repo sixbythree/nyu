@@ -1,0 +1,40 @@
+<!DOCTYPE html5>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script> 
+    
+</head>
+<body>
+    <section>
+        <header>
+            <h1>Flux ITP</h1>
+            <span id="current-time"></span>
+            <button id="dark-mode">Dark Mode</button>
+        </header>
+        <nav id="view">
+            <div class="chart-view">North</div>
+            <div class="chart-view">South</div>
+            <div class="chart-view">Split</div>
+        </nav>
+    </section> 
+    <section>
+        <div id="chartN">
+            <canvas id="northF"></canvas>
+        </div>
+        <div id="chartS">
+            <canvas id="southF"></canvas>
+        </div>
+        <div id="result"></div>
+    </section>    
+</body>
+<footer>
+    <script src="scriptChart.js"></script>
+    <script src="scriptTime.js"> </script>
+</footer>
+</html>
