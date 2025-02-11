@@ -26,16 +26,19 @@ header {
     border-radius: 4px;
 }
 
-#dark-mode {
+#dark-mode-button {
     position: absolute; /* Positioning on the left */
     left: 2px; /* Adding some space from the left edge */
     padding: 5px 10px;
+    cursor:pointer;
     font-size: 12px;
     font-weight:400;
     background-color: black;
     color:white;
+    border:none;
     border-radius: 4px;
 }
+
 
 
 body{
@@ -43,6 +46,60 @@ body{
     font-family: sans-serif;
     background-color: #F7F7F7;
 }
+
+body.dark-mode {
+    padding: 20px;
+    font-family: sans-serif;
+    background-color: #1A1A1A;
+}
+
+body.dark-mode h1 {
+    font-family: "Electrolize", sans-serif;
+    color: white;
+    -webkit-text-stroke: .5px white;
+}
+
+body.dark-mode #view div{
+    border: 1px solid white;
+    padding: 1px 8px;
+    font-size: 10;
+    font-weight: 100;
+    color: white
+}
+
+body.dark-mode #chartN {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;     /* Vertically centers the content */
+    background-color: #1A1A1A;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border: 1px solid white;
+    width: 60%;
+    min-width: 700px;
+    height: 40%;           /* Height for the container */
+    min-height: 200px;
+    margin:0 auto;
+    overflow: hidden;
+}
+
+body.dark-mode #chartS {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;     /* Vertically centers the content */
+    background-color: #1A1A1A;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 1px solid white;
+    width: 60%;
+    min-width: 700px;
+    height: 40%;           /* Height for the container */
+    min-height: 200px;
+    margin:0 auto;
+    overflow: hidden;
+}
+
+
 
 #view {
     display: flex;
@@ -77,31 +134,13 @@ body{
     justify-content: center;
 } 
 
-#chartN {
-    display: flex;
-    justify-content: center; /* Horizontally centers the content */
-    align-items: center;     /* Vertically centers the content */
-    background-color: white;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-    border: 1px solid #333;
-    width: 60%;
-    min-width: 700px;
-    height: 40%;           /* Height for the container */
-    min-height: 200px;
-    margin:0 auto;
-    overflow: hidden;
-}
 
-#chartS {
+#chartN, #chartS {
     display: flex;
     justify-content: center; /* Horizontally centers the content */
     align-items: center;     /* Vertically centers the content */
-    height: 400px;           /* Height for the container */
     background-color: white;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border: 1px solid #333;
+    border: 1px solid black;
     width: 60%;
     min-width: 700px;
     height: 40%;           /* Height for the container */
@@ -112,6 +151,36 @@ body{
 
 
 #northF, #southF{
-    max-width: 85%;
-    max-height: 90%
+    max-width: 100%;
+    max-height: 90%;
+    padding: 20px;
+}
+
+
+.chart-container {
+    display: none;
+    width: 60%;        /* Adjust width */
+    min-width: 700px;  /* Adjust min width */
+    margin: 0 auto;    Center horizontally
+}
+
+
+/* When showing only one chart (center it) */
+.chart-container.single-chart {
+    width: 80%;        /* Adjust the width when it's the only chart */
+    min-width: 500px;  /* Adjust min width for the single chart */
+    padding-top: 20px;
+    border-radius: 10px;
+}
+
+
+
+#chartN:not(.single-chart){
+    border-top-right-radius: 10px; /* Smaller radius for split view */
+    border-top-left-radius: 10px; /* Smaller radius for split view */
+}
+
+#chartS:not(.single-chart){
+    border-bottom-right-radius: 10px; /* Smaller radius for split view */
+    border-bottom-left-radius: 10px; /* Smaller radius for split view */
 }
