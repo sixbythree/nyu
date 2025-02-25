@@ -31,29 +31,18 @@ function fetchText() {
         .catch(error => getResponse(error));// if there is an error
 }
 
+export let dFormatted = [];
 
 // function to call when you've got something to display:
-function getResponse(data) {
+export function getResponse(data) {
     const lines = data
         .split("\n")
         .filter(d => d.trim())
         .map(d => JSON.parse(d));
-    document.getElementById('result').innerHTML = lines.map(d => d.sensor);
-    
+    dFormatted = lines.map(d => d.sensor)
+    document.getElementById('result').innerHTML = dFormatted;
 
 }
-
-function updateChart(data) {
-    // Assuming the JSON contains an array of values under 'votes'
-    const votesData = data.votes;
-
-    // Update the chart's data
-    myChart.data.datasets[0].data = votesData;
-    
-    // Update the chart to reflect the changes
-    myChart.update();
-}
-
 
 
 // This is a listener for the page to load.

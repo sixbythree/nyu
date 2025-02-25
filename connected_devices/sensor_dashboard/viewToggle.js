@@ -1,3 +1,4 @@
+//*GPT
 // Get the elements for each view and the chart containers
 const northView = document.getElementById('north-view');
 const southView = document.getElementById('south-view');
