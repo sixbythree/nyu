@@ -44,6 +44,7 @@ long lastSend = 0;
 Adafruit_VL53L0X sensor = Adafruit_VL53L0X();
 
 const int maxDistance  = 2000;
+int sleeping = 0;
 
 
 void setup() {
@@ -102,36 +103,40 @@ void loop() {
   if (sensor.isRangeComplete()) {
     // read the result:
     int result = sensor.readRangeResult();
-    // if it's with the max distance:
-    if (result < maxDistance) {
-      // print the result (distance in mm):
-      Serial.println(result);
- 
-    }
 
-  // once every interval, get a reading and send it:
-  if (millis() - lastSend > interval) {
-    // read sensor:
-    int sensor = result; //analogRead(A0);
+    // store sensor result:
+    int reading = result; //analogRead(A0);
 
     // format the message as JSON string:
     String message = "{\"device\": \"DEVICE\", \"sensor\": READING}";
-    // replace READING with the reading:
-    message.replace("READING", String(sensor));
     // and DEVICE with your device's name:
     message.replace("DEVICE", deviceName);
-    // send the message:
-    client.println(message);
-    // update the timestamp:
-    lastSend = millis();
-  }
+    
+    // if it's with the max distance:
+    if (result < (maxDistance-300)) {
+      // print the result (distance in mm):
+      Serial.println("Detecting");
+      sleeping = 0;
+      // replace READING with the reading:
+      message.replace("READING", String(reading));
+      // send the message:
+      client.println(message); 
+    } else{
+      Serial.println("Sleeping");
+      if (!sleeping){
+        // When there are no passerbys, sensor reading should be 0.
+        message.replace("READING", String(0));
+        // send the message:
+        client.println(message); 
+        sleeping = 1;
+      }
+    }
 
-  // check if there is incoming data available to be received
-  int messageSize = client.available();
-  // if there's a string with length > 0:
-  if (messageSize > 0) {
-    Serial.println("Received a message:");
-    Serial.println(client.readString());
-  }
+  // // once every interval, get a reading and send it:
+  // if (millis() - lastSend > interval) {
+  //     // update the timestamp:
+  //   lastSend = millis();
+  // }
+
 }
 }
