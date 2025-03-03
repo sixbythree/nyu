@@ -1,7 +1,7 @@
 /*
-  WiFi TCP Client
+  WiFi TCP Client with Time of Flight (TOF) Sensor 
   TCP Socket client for WiFiNINA and WiFi101 libraries.
-  Connects to the TCP socket server, reads a sensor once
+  Connects to the TCP socket server, reads a TOF sensor once
   every five seconds, and sends a message with the reading.
 
   You'll need to include an arduino_secrets.h file with the following info:
@@ -17,12 +17,15 @@
   created 30 Dec 2022
   updated 27 Jan 2025
   by Tom Igoe
+
+  updated 3 Mar 2025
+  by Samuel Oge
  */
 
-// #include <WiFi101.h>   // use this for MKR1000 board
+
 #include <WiFiNINA.h>  // use this for Nano 33 IoT or MKR1010 boards
-// #include <WiFi.h>      // use this for Nano ESP32 board
 #include "arduino_secrets.h"
+#include "Adafruit_VL53L0X.h" // this is the library for TOF sensor
 
 // Initialize the Wifi client library
 WiFiClient client;
@@ -31,11 +34,17 @@ WiFiClient client;
 const char server[] = "";
 const int portNum = 8080;
 // change this to a unique name for the device:
-String deviceName = "sammy";
+String deviceName = "TOF_sensor";
 // message sending interval, in ms:
 int interval = 5000;
 // last time a message was sent, in ms:
 long lastSend = 0;
+
+// make an instance of the library:
+Adafruit_VL53L0X sensor = Adafruit_VL53L0X();
+
+const int maxDistance  = 2000;
+
 
 void setup() {
   //Initialize serial
@@ -59,6 +68,23 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.print("Signal Strength (dBm): ");
   Serial.println(WiFi.RSSI());
+
+
+
+  // initialize sensor, stop if it fails:
+  if (!sensor.begin()) {
+    Serial.println("Sensor not responding. Check wiring.");
+    while (true);
+  }
+  /* config can be:
+    VL53L0X_SENSE_DEFAULT: about 500mm range
+    VL53L0X_SENSE_LONG_RANGE: about 2000mm range
+    VL53L0X_SENSE_HIGH_SPEED: about 500mm range
+    VL53L0X_SENSE_HIGH_ACCURACY: about 400mm range, 1mm accuracy
+  */
+  sensor.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_LONG_RANGE);
+  // set sensor to range continuously:
+  sensor.startRangeContinuous();
 }
 
 void loop() {
@@ -72,10 +98,22 @@ void loop() {
     return;
   }
 
+  // if the reading is done:
+  if (sensor.isRangeComplete()) {
+    // read the result:
+    int result = sensor.readRangeResult();
+    // if it's with the max distance:
+    if (result < maxDistance) {
+      // print the result (distance in mm):
+      Serial.println(result);
+ 
+    }
+
   // once every interval, get a reading and send it:
   if (millis() - lastSend > interval) {
     // read sensor:
-    int sensor = analogRead(A0);
+    int sensor = result; //analogRead(A0);
+
     // format the message as JSON string:
     String message = "{\"device\": \"DEVICE\", \"sensor\": READING}";
     // replace READING with the reading:
@@ -95,4 +133,5 @@ void loop() {
     Serial.println("Received a message:");
     Serial.println(client.readString());
   }
+}
 }
