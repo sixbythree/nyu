@@ -25,13 +25,13 @@
 
 #include <WiFiNINA.h>  // use this for Nano 33 IoT or MKR1010 boards
 #include "arduino_secrets.h"
-#include "Adafruit_VL53L0X.h" // this is the library for TOF sensor
+#include "Adafruit_VL53L0X.h"  // this is the library for TOF sensor
 
 // Initialize the Wifi client library
 WiFiClient client;
 
 // replace with your host computer's IP address
-const char server[] = "";
+const char server[] = "10.23.10.82";
 const int portNum = 8080;
 // change this to a unique name for the device:
 String deviceName = "TOF_sensor";
@@ -39,11 +39,13 @@ String deviceName = "TOF_sensor";
 int interval = 5000;
 // last time a message was sent, in ms:
 long lastSend = 0;
+// // Declare message as global varibable:
+// String message; 
 
 // make an instance of the library:
 Adafruit_VL53L0X sensor = Adafruit_VL53L0X();
 
-const int maxDistance  = 2000;
+const int maxDistance = 2000;
 int sleeping = 0;
 
 
@@ -52,7 +54,7 @@ void setup() {
   Serial.begin(9600);
   // if serial monitor's not open, wait 3 seconds:
   if (!Serial) delay(3000);
- 
+
   // Connect to WPA/WPA2 network.
   WiFi.begin(SECRET_SSID, SECRET_PASS);
 
@@ -71,11 +73,11 @@ void setup() {
   Serial.println(WiFi.RSSI());
 
 
-
   // initialize sensor, stop if it fails:
   if (!sensor.begin()) {
     Serial.println("Sensor not responding. Check wiring.");
-    while (true);
+    while (true)
+      ;
   }
   /* config can be:
     VL53L0X_SENSE_DEFAULT: about 500mm range
@@ -102,41 +104,38 @@ void loop() {
   // if the reading is done:
   if (sensor.isRangeComplete()) {
     // read the result:
-    int result = sensor.readRangeResult();
-
-    // store sensor result:
-    int reading = result; //analogRead(A0);
+    int reading = sensor.readRangeResult();
 
     // format the message as JSON string:
     String message = "{\"device\": \"DEVICE\", \"sensor\": READING}";
     // and DEVICE with your device's name:
     message.replace("DEVICE", deviceName);
-    
+
     // if it's with the max distance:
-    if (result < (maxDistance-300)) {
+    if (reading < (maxDistance - 300)) {
       // print the result (distance in mm):
       Serial.println("Detecting");
+      Serial.println(reading);
       sleeping = 0;
       // replace READING with the reading:
       message.replace("READING", String(reading));
       // send the message:
-      client.println(message); 
-    } else{
+      client.println(message);
+    } else {
       Serial.println("Sleeping");
-      if (!sleeping){
+      if (!sleeping) {
         // When there are no passerbys, sensor reading should be 0.
         message.replace("READING", String(0));
         // send the message:
-        client.println(message); 
+        client.println(message);
         sleeping = 1;
       }
     }
 
-  // // once every interval, get a reading and send it:
-  // if (millis() - lastSend > interval) {
-  //     // update the timestamp:
-  //   lastSend = millis();
-  // }
-
-}
+    // // once every interval, get a reading and send it:
+    // if (millis() - lastSend > interval) {
+    //     // update the timestamp:
+    //   lastSend = millis();
+    // }
+  }
 }

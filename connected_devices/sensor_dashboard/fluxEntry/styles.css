@@ -1,0 +1,174 @@
+h1, h2, #view div, #result{
+    text-align: center;
+}
+
+h1{
+    font-family: "Electrolize", sans-serif;
+    -webkit-text-stroke: .5px black;
+    
+}
+header {
+    display: flex;
+    justify-content: center;  /* Center the title */
+    align-items: center;
+    position: relative; /* So we can absolutely position the time */
+    width: 100%; /* Full width to ensure proper centering */
+}
+
+/* Styling the time */
+#current-time {
+    position: absolute; /* Positioning on the right */
+    right: 2px; /* Adding some space from the right edge */
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight:400;
+    background-color: white;
+    border-radius: 4px;
+}
+
+#dark-mode-button {
+    position: absolute; /* Positioning on the left */
+    left: 2px; /* Adding some space from the left edge */
+    padding: 5px 10px;
+    cursor:pointer;
+    font-size: 12px;
+    font-weight:400;
+    background-color: black;
+    color:white;
+    border:none;
+    border-radius: 4px;
+}
+
+
+
+body{
+    padding: 20px;
+    font-family: sans-serif;
+    background-color: #F7F7F7;
+}
+
+body.dark-mode {
+    padding: 20px;
+    font-family: sans-serif;
+    background-color: #1A1A1A;
+}
+
+body.dark-mode h1 {
+    font-family: "Electrolize", sans-serif;
+    color: white;
+    -webkit-text-stroke: .5px white;
+}
+
+body.dark-mode #view div{
+    border: 1px solid white;
+    padding: 1px 8px;
+    font-size: 10;
+    font-weight: 100;
+    color: white
+}
+
+body.dark-mode #chartI {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;     /* Vertically centers the content */
+    background-color: #1A1A1A;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border: 1px solid white;
+    width: 60%;
+    min-width: 700px;
+    height: 40%;           /* Height for the container */
+    min-height: 200px;
+    margin:0 auto;
+    overflow: hidden;
+}
+
+
+
+#view {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+#view div {
+    border: 1px solid black;
+    padding: 1px 8px;
+    font-size: 10;
+    font-weight: 100;
+}
+
+#view div:hover {
+    background-color: #2C057D;
+    color:white
+} 
+
+#result {
+    background-color: orange;
+    width: 50%;
+    margin:0 auto;
+    overflow-wrap: anywhere;
+    font-size: 15;
+    font-weight: 100;
+    /* border:5px solid black; */
+}
+
+/* Parent container to hold the two mini charts */
+.top-charts {
+    display: flex;
+    justify-content: space-between; /* Space out the mini charts */
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 10px; /* Space before the main chart */
+}
+
+/* Mini charts styling */
+.mini-chart {
+    width: 48%; /* Adjust width to fit two side-by-side */
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Main chart container */
+#chartI {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+    width: 60%;
+    min-width: 700px;
+    height: 40%;
+    min-height: 200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+
+.chart-container {
+    display: none;
+    width: 60%;        /* Adjust width */
+    min-width: 700px;  /* Adjust min width */
+    margin: 0 auto;    /*Center horizontally*/
+}
+
+
+/* When showing only one chart (center it) */
+.chart-container.single-chart {
+    width: 80%;        /* Adjust the width when it's the only chart */
+    min-width: 500px;  /* Adjust min width for the single chart */
+    min-height:1000px;
+    padding-top: 20px;
+    border-radius: 10px;
+}
+
+
+
+#chartI:not(.single-chart){
+    border-radius:10px;
+}

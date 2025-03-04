@@ -1,0 +1,43 @@
+<!DOCTYPE html5>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script> 
+    <script src="darkMode.js"></script> 
+    
+</head>
+<body>
+    <section>
+        <header>
+            <h1>Flux ITP</h1>
+            <span id="current-time"></span>
+            <button id="dark-mode-button">Dark Mode</button>
+        </header>
+        <nav id="view">
+            <div class="chart-view" id="view">Inflow</div>
+        </nav>
+    </section> 
+    <section class="dashboard">
+        <div id="info">
+            <article>
+                <h3> Most Recent Data</h3>
+                <canvas id="movement"></canvas>
+            </article>
+        </div>
+        <div id="chartI" class="chart-container">
+            <canvas id="inflow"></canvas>
+        </div>
+        <div id="result"></div>
+    </section>    
+</body>
+<footer>
+    <script src="scriptChart.js" type="module"></script>
+    <!-- <script src="scriptTime.js"> </script> -->
+    <!-- <script src="viewToggle.js"></script> -->
+</footer>
+</html>
