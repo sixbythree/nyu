@@ -31,7 +31,7 @@
 WiFiClient client;
 
 // replace with your host computer's IP address
-const char server[] = "10.23.10.82";
+const char server[] = "10.23.11.233";
 const int portNum = 8080;
 // change this to a unique name for the device:
 String deviceName = "TOF_sensor";
