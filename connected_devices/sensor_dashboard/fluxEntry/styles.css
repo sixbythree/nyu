@@ -120,7 +120,8 @@ body.dark-mode #chartI {
     justify-content: space-between; /* Space out the mini charts */
     width: 60%;
     margin: 0 auto;
-    margin-bottom: 10px; /* Space before the main chart */
+    margin-bottom: 20px; /* Space before the main chart */
+    gap: 20px;
 }
 
 /* Mini charts styling */
@@ -133,6 +134,30 @@ body.dark-mode #chartI {
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+
+
+.mini-chart p{
+
+    font-size:2rem;
+    text-align: center;
+
+}
+
+
+.circle {
+    width: 150px;
+    height: 150px;
+    background-color: #a0d0f6;
+    border-radius: 50%; /* Makes the div a circle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin: auto;
+}
+
 
 /* Main chart container */
 #chartI {

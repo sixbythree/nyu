@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script> 
+    <script src="script.js" type="module"></script> 
     <script src="darkMode.js"></script> 
     
 </head>
@@ -23,17 +23,23 @@
         </nav>
     </section> 
     <section class="dashboard">
-        <div id="info">
-            <article>
-                <h3> Most Recent Data</h3>
+        <div class="top-charts">
+            <div class="mini-chart">
+                <h3>Most Recent Data</h3>
                 <canvas id="movement"></canvas>
-            </article>
+            </div>
+            <div class="mini-chart">
+                <h3>Floor Population</h3>
+                <div class="circle">
+                    <p id="population"></p>
+                </div> 
+            </div>
         </div>
         <div id="chartI" class="chart-container">
             <canvas id="inflow"></canvas>
         </div>
         <div id="result"></div>
-    </section>    
+    </section>
 </body>
 <footer>
     <script src="scriptChart.js" type="module"></script>

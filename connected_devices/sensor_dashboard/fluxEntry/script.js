@@ -25,57 +25,75 @@ function fetchText() {
         }
     }
     // make the HTTP/S call:
-    fetch('log.json', params)
+    // To pull from Tom's data file on his site => https://tigoe.net/data.json
+    fetch('TOF.json', params)
         .then(response => response.text())  // convert response to text
         .then(data => getResponse(data))    // get the body of the response
         .catch(error => getResponse(error));// if there is an error
 }
 
 
+/**
+ * Detects sequences of nonzero values in a data stream, identifying approach or departure patterns.
+ *
+ * @param {number[]} dataStream - An array of numerical sensor data.
+ * @returns {Object} dataBatch - An object containing detected batches with metadata.
+ *
+ * Each batch contains:
+ *  - batchCount: Number of consecutive nonzero values.
+ *  - start: Index where the batch started.
+ *  - sensorReadings: Array of values in the batch.
+ *  - slope: Calculated slope from linear regression.
+ *  - timestamp: (Undefined source, assumed to be MRT['timestamp']).
+ */
+export function detectApproachOrDeparture(dataStream) {
+    let counter = 0; // Counts consecutive nonzero values
+    let batch = 1; // Tracks batch size
+    let dataBatch = {}; // Stores detected batches
 
-export function detectApproachOrDeparture(dataStream){
-    let counter = 0
-    let batch = 1
-    let dataBatch = {}
-    for (let i=0; i<dataStream.length;i++){
-        if (Number(dataStream[i])!=0){
-            counter+=1
-        } else{
+    for (let i = 0; i < dataStream.length; i++) {
+        if (Number(dataStream[i]) !== 0) {
+            counter += 1; // Increment counter for consecutive nonzero values
+        } else {
+            // Process batch when a zero is encountered (end of a batch)
             if (batch !== 1) {
                 if (!dataBatch[i]) {
-                    dataBatch[i] = {}
+                    dataBatch[i] = {};
                 }
-                let indexStart = (i-batch)-1;
+                
+                let indexStart = (i - batch) - 1; // Determine batch start index
                 dataBatch[i] = {
-                        batchCount:batch,  // Batch count
-                        start:indexStart,  // Start index of the batch
-                        sensorReadings:[],  // Data values in the batch
-                        slope:0,   // Slope (calculated later)
-                        timestamp: MRT['timestamp']
+                    batchCount: batch,  // Number of nonzero values in batch
+                    start: indexStart,  // Start index of the batch
+                    sensorReadings: [], // Data values in the batch
+                    slope: 0,  // Placeholder for calculated slope
+                    timestamp: MRT['timestamp'] // Assumed external timestamp source
+                };
 
-                    };  // Initialize an empty array
-    
-                for(let j=(indexStart); j<=(indexStart)+batch; j++){
-                    dataBatch[i]["sensorReadings"].push(dataStream[j])
+                // Store the sensor readings in the batch
+                for (let j = indexStart; j <= indexStart + batch; j++) {
+                    dataBatch[i]["sensorReadings"].push(dataStream[j]);
                 }
-                dataBatch[i]["slope"] = [parseInt(linearRegressionFromArray(dataBatch[i]["sensorReadings"])["slope"])]
+
+                // Compute and store slope using linear regression
+                dataBatch[i]["slope"] = [parseInt(linearRegressionFromArray(dataBatch[i]["sensorReadings"])['slope'])];
             }
-            counter=0
-            batch=1
+            // Reset batch tracking variables
+            counter = 0;
+            batch = 1;
         }
         
-        if (counter>2){
-            //console.log(counter)
-            if (Number(dataStream[i])!=0){
-                batch+=1
+        // Continue batch detection if nonzero values persist
+        if (counter > 2) {
+            if (Number(dataStream[i]) !== 0) {
+                batch += 1;
             }
         }
-        
     }
 
-    return dataBatch
-    
+    return dataBatch;
 }
+
 
 //GPT produced function
 export function linearRegressionFromArray(yValues) {
@@ -106,23 +124,24 @@ export let MRT;
 
 // function to call when you've got something to display:
 function getResponse(data) {
-    // const lines = data
-    //     .split("\n")
-    //     .filter(d => d.trim())
-    //     .map(d => JSON.parse(d));
-
     const lines = data
-    .trim()                             // Remove any surrounding whitespace/newlines
-    .split("\n}")                        // Split the string at each closing brace of a JSON object
-    .map(d => d.trim() + '}')             // Add the closing brace back to each line
-    .filter(d => d.length > 2)           // Remove any empty strings
-    .map(d => JSON.parse(d)); 
-    MRT = lines[lines.length - 2];
+        .split("\n")
+        .filter(d => d.trim())
+        .map(d => JSON.parse(d)); 
+        // .filter(d => d.trim())
+    
+    // console.log("data:",lines[564].timeStamp.slice(11, 19));
+    // const lines = data
+    
+    MRT = lines.map(l => l.timeStamp.slice(11,19));
+    // console.log("Most recent time:", MRT.at(-1)) 
     let sensorData = lines.map(d => d.sensor);
     let detector = detectApproachOrDeparture(sensorData);
     let mostRecent = Math.max(...Object.keys(detector).map(key => parseInt(key, 10)));
     MRD = detector[mostRecent];
-    document.getElementById('result').innerHTML = JSON.stringify(MRD,null,2);  
+    console.log('most recent:', MRD)
+    console.log("Most recent data size:",Object.keys(MRD).length)
+    document.getElementById('result').innerHTML =  JSON.stringify(lines,null,2); //JSON.stringify(MRD,null,2);  
 }
 
 

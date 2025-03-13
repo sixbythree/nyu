@@ -131,11 +131,5 @@ void loop() {
         sleeping = 1;
       }
     }
-
-    // // once every interval, get a reading and send it:
-    // if (millis() - lastSend > interval) {
-    //     // update the timestamp:
-    //   lastSend = millis();
-    // }
   }
 }
