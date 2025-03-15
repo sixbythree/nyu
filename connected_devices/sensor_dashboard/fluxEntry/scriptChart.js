@@ -157,7 +157,7 @@ const chartInstanceI = new Chart(itx, {
     datasets: [
       {
         label: `# of People in North Floor ${currentTime}`,
-        data: sensorData, //: [timeLog['0:00'], timeLog['0:00'], timeLog['0:00'], 11, 14, 10, 19, 16, 20, 17, 2, 4, 3, 1, 6, 3, 5, 7, 8, 4, 9, 2, 1, 5],
+        data: sensorData,
         borderWidth: 1,
       },
     ],
@@ -184,24 +184,23 @@ const chartInstanceI = new Chart(itx, {
 
 // Updating chart dynamically with new data
 function updateChart() {
-  // // If most recent data has been fetched
-  // if (!isMRDPopulated) {
-  //     updateMRD();
-  //     return;  // If MRD is not populated, exit the function early
-  // }
+  console.log("UPDAING THE CHART");
+  console.log("MRD SLICE", Object.keys(MRD));
+  console.log("MRD SLICE", MRD.TimeStamp);
 
   // Update the `sensorData` array with new readings for current hour
-  if (currentTime.slice(0, 2) === MRD["timestamp"].slice(0, 2)) {
-    console.log("Most Recent Data Time Record:", MRD["timestamp"]);
+  // If the current hour is equal the most recent data's hour:
+  if (currentTime.slice(0, 2) === MRD["TimeStamp"].slice(0, 2)) {
+    console.log("Most Recent Data Time Record:", MRD["TimeStamp"]);
     console.log("Last Check-in:", lastCheckIn);
 
     // Since our last time check-in, did another person approach?
     // MRD provides our Most Recent Data for movement detection (non 0 sensor readings)
 
-    // If the timestamp for our Most Recent Data entry is greater than our last check-in
+    // If the time stamp for our Most Recent Data entry is greater than our last check-in
     // Determine if someone approached or departed.
 
-    if (MRD["timestamp"] >= lastCheckIn) {
+    if (MRD["TimeStamp"] >= lastCheckIn) {
       console.log("Time to update!");
 
       lastCheckIn = currentTime; // Update last check-in

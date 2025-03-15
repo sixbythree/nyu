@@ -42,12 +42,12 @@ MqttClient mqttClient(wifi);
 char broker[] = "tigoe.net";
 int port = 1883;
 char topic[] = "TOF";
-String clientID = "arduinoMqttClient-";   // ?????Why is the client id arduinoMqttClient-?
+String clientID = "arduinoMqttClient-";  // ?????Why is the client id arduinoMqttClient-?
 
 // last time the client sent a message, in ms:
 long lastTimeSent = 0;
 // message sending interval:
-int interval = 2 * 1000;
+int interval = .5 * 1000;
 
 // make an instance of the library:
 Adafruit_VL53L0X sensor = Adafruit_VL53L0X();
@@ -60,7 +60,7 @@ void setup() {
   Serial.begin(9600);
   // wait for serial monitor to open:
   if (!Serial) delay(3000);
-  pinMode(LED_BUILTIN, OUTPUT);  
+  pinMode(LED_BUILTIN, OUTPUT);
   // connect to WiFi:
   connectToNetwork();
   Serial.println("Loading...");
@@ -87,7 +87,7 @@ void setup() {
   sensor.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_LONG_RANGE);
   // set sensor to range continuously:
   sensor.startRangeContinuous();
-   Serial.println("Setup Complete!");
+  Serial.println("Setup Complete!");
 }
 
 void loop() {
@@ -103,9 +103,9 @@ void loop() {
     connectToBroker();
   }
   // poll for new messages from the broker:
-  mqttClient.poll();  
-  
-  
+  mqttClient.poll();
+
+
   // if the reading is done:
   if (sensor.isRangeComplete()) {
     // read the result:
@@ -118,24 +118,29 @@ void loop() {
 
     // if it's with the max distance:
     if (sensorReading < (maxDistance - 300)) {
+      sleeping = 0;
+
       // print the result (distance in mm):
       Serial.println("Detecting");
       Serial.println(sensorReading);
-      sleeping = 0;
-      message.replace("READING", String(sensorReading));
-      if (mqttClient.connected()) {
-      // start a new message on the topic:
-      mqttClient.beginMessage(topic);
-      // print the body of the message:
-      mqttClient.print(message);
-      // send the message:
-      mqttClient.endMessage();
-      // send a serial notification:
-      Serial.print("published a message: ");
-      Serial.println(sensorReading);
-      // timestamp this message:
-      lastTimeSent = millis();
-    }
+      message.replace("READING", String(sensorReading));      
+      
+      if (millis() - lastTimeSent > interval) {
+        Serial.println(message);
+        if (mqttClient.connected()) {
+          // start a new message on the topic:
+          mqttClient.beginMessage(topic);
+          // print the body of the message:
+          mqttClient.print(message);
+          // send the message:
+          mqttClient.endMessage();
+          // send a serial notification:
+          Serial.print("published a message: ");
+          Serial.println(message);
+          // timestamp this message:
+          lastTimeSent = millis();
+        }
+      }
     } else {
       Serial.println("Sleeping");
       if (!sleeping) {
@@ -143,23 +148,24 @@ void loop() {
         message.replace("READING", String(0));
         // send the message:
         if (mqttClient.connected()) {
-        // start a new message on the topic:
-        mqttClient.beginMessage(topic);
-        // print the body of the message:
-        mqttClient.print(message);
-        // send the message:
-        mqttClient.endMessage();
-        // send a serial notification:
-        Serial.print("published a message: ");
-        Serial.println(sensorReading);
-        // timestamp this message:
-        lastTimeSent = millis();
-      }
+            // start a new message on the topic:
+            mqttClient.beginMessage(topic);
+            // print the body of the message:
+            mqttClient.print(message);
+            // send the message:
+            mqttClient.endMessage();
+            // send a serial notification:
+            Serial.print("published a message: ");
+            Serial.println(sensorReading);
+            // timestamp this message:
+            lastTimeSent = millis();
+          }
+        }
         sleeping = 1;
       }
     }
   }
-}
+
 
 boolean connectToBroker() {
   // if the MQTT client is not connected:
@@ -186,11 +192,11 @@ boolean connectToBroker() {
 // When does this code get executed?
 void onMqttMessage(int messageSize) {
   // we received a message, print out the topic and contents
-  Serial.println("Received a message with topic ");
-  Serial.print(mqttClient.messageTopic());
-  Serial.print(", length ");
-  Serial.print(messageSize);
-  Serial.println(" bytes:");
+  // Serial.println("Received a message with topic ");
+  // Serial.print(mqttClient.messageTopic());
+  // Serial.print(", length ");
+  // Serial.print(messageSize);
+  // Serial.println(" bytes:");
   String incoming = "";
   // use the Stream interface to print the contents
   while (mqttClient.available()) {
@@ -203,7 +209,7 @@ void onMqttMessage(int messageSize) {
     analogWrite(LED_BUILTIN, result);
   }
   // print the result:
-  Serial.println(result);
+  // Serial.println(result);
   delay(100);
 }
 
