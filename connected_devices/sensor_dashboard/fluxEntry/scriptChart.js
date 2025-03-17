@@ -176,6 +176,7 @@ const chartInstanceI = new Chart(itx, {
         beginAtZero: true,
       },
     },
+    maintainAspectRatio: false,
   },
 });
 //--------------------------------------------------------------------------------------------------------------------
@@ -230,7 +231,7 @@ function updateChart() {
     }
   }
   console.log(timeLog);
-
+  document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
   document.getElementById("population").innerHTML = population;
 
   // Step 3: Update the chart with new data
@@ -238,6 +239,7 @@ function updateChart() {
   chartInstanceI.update(); // This re-renders the chart with the updated data
 }
 
+updateChart();
 // Simulate calling the update function after some time (e.g., every minute or every new sensor reading)
 setInterval(updateChart, 5000); // Update every 5 seconds for demo purposes
 //--------------------------------------------------------------------------------------------------------------------

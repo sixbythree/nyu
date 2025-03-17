@@ -19,7 +19,7 @@ export let MRT;
 // this function is called once on page load (see below):
 function setup() {
   // set an interval to run fetchText() every 5 seconds:
-  setInterval(fetchText, 5000);
+  setInterval(fetchText, 1000);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -97,7 +97,9 @@ export function detectApproachOrDeparture(dataStream) {
         // Store the sensor readings & timeStamp in the batch
         for (let j = indexStart; j <= indexStart + batch; j++) {
           dataBatch[i]["sensorReadings"].push(dataStream[j].sensor);
-          dataBatch[i]["timeStamps"].push(dataStream[j].timeStamp);
+          dataBatch[i]["timeStamps"].push(
+            dataStream[j].timeStamp.slice(11, 19)
+          );
         }
 
         // Compute and store slope using linear regression
@@ -107,6 +109,7 @@ export function detectApproachOrDeparture(dataStream) {
           ),
         ];
         dataBatch[i]["TimeStamp"] = dataBatch[i].timeStamps.at(-1);
+        dataBatch[i]["Date"] = dataStream[i].timeStamp.slice(0, 10);
       }
       // Reset batch tracking variables
       counter = 0;
@@ -167,10 +170,10 @@ function getResponse(data) {
   console.log("Data cleaned and ready to use!");
 
   MRT = lines.map((l) => l.timeStamp.slice(11, 19)).at(-1);
-  console.log("Most recent time:", MRT);
+  console.log("MRT:", MRT);
   let sensorData = lines.map((d) => ({
     sensor: d.sensor,
-    timeStamp: d.timeStamp.slice(11, 19),
+    timeStamp: d.timeStamp,
   }));
   let detector = detectApproachOrDeparture(sensorData);
   let mostRecent = Math.max(
@@ -184,7 +187,7 @@ function getResponse(data) {
   //     null,
   //     2
   //   );
-  document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
+  // document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
 }
 //--------------------------------------------------------------------------------------------------------------------
 
