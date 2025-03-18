@@ -63,6 +63,10 @@ body{
     /* border:5px solid black; */
 }
 
+
+.dashboard{
+    height:100vh;
+}
 /* Parent container to hold the two mini charts */
 .top-charts {
     display: flex;
@@ -70,7 +74,7 @@ body{
     width: 60%;
     margin: 0 auto;
     margin-bottom: 20px; /* Space before the main chart */
-    min-height: 40%;
+    min-height: 35%;
     gap: 20px;
 }
 
@@ -115,6 +119,15 @@ body{
 
 }
 
+#movement{
+    padding: 20px; 
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: auto;
+    height: 100vh;
+}
+
+
 
 /* Main chart container */
 #chartI {
@@ -126,35 +139,51 @@ body{
     /* border: 1px solid black; */
     width: 60%;
     min-width: 660px;
-    height: 40%;
+    height: 45%;
     min-height: 200px;
     margin: 0 auto;
     overflow: hidden;
     border-radius:10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    position:relative;
 }
 
 #chartI h3{
-
-    margin-top:-2px;
+    
     margin-bottom: 0px;
     position: relative; 
     top: 5%; 
 }
 
 
-#movement{
-    padding: 20px;
-    margin: auto;
-    height: 100%
+/* Main chart container */
+#inflow {
+    box-sizing:border-box;
+    padding:30px;
 }
+
+
 
 #inflow{
     width:100%;
-    transform: scale(0.8); 
 }
 
+.datePicker{
 
+    display: flex;
+    position:absolute;
+    top:10px;
+    right:10px;
+    gap:10px;
+    align-items: center;
+
+}
+
+#dateDisplay{
+    color:black;
+    font-size:.8rem;
+    margin:0 auto;
+}
 
 
 

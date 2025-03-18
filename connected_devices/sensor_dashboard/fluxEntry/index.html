@@ -1,9 +1,10 @@
-<!DOCTYPE html5>
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- <link href="reset.css" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -36,6 +37,9 @@
             </div>
         </div>
         <div id="chartI" class="chart-container">
+            <div class="datePicker">
+                <button id="prevDay">⬅️</button><span id="dateDisplay"></span><button id="nextDay">➡️</button>
+                </div>
             <h3>Hourly Flux</h3>
             <canvas id="inflow"></canvas>
         </div>

@@ -9,8 +9,10 @@
   by Tom Igoe
 */
 
-export let MRD = {};
-export let MRT;
+let MRD = {};
+let MRT;
+import { updateMotionChart } from "./scriptChart.js";
+import { updateChartI } from "./scriptChart.js";
 
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -19,7 +21,8 @@ export let MRT;
 // this function is called once on page load (see below):
 function setup() {
   // set an interval to run fetchText() every 5 seconds:
-  setInterval(fetchText, 1000);
+  fetchText();
+  setInterval(fetchText, 2000);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -40,18 +43,61 @@ function fetchText() {
   };
   // make the HTTP/S call:
   // To pull from Tom's data file on his site => https://tigoe.net/data.json
-  fetch("TOF.json", params)
+  // fetch("https://tigoe.net/data.json", params)
+  fetch("20250311-TOF.json", params)
     .then((response) => {
       console.log("Fetching data...");
       return response.text();
     }) // convert response to text
     .then((data) => {
-      console.log(`Data is, ${data.split("\n").length} lines long`),
-        getResponse(data);
+      // console.log(`Data is, ${data.split("\n").length} lines long`),
+      getResponse(data);
     }) // get the body of the response
     .catch((error) => getResponse(error)); // if there is an error
 }
 //--------------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------------
+
+// Getting fetched Data response
+
+// function to call when you've got something to display:
+function getResponse(data) {
+  const lines = cleanData(data);
+  console.log(
+    `Data cleaned and ready to use!\nData is, ${lines.length} lines long.`
+  );
+
+  MRT = lines.map((l) => l.timeStamp.slice(11, 19)).at(-1);
+  console.log("MRT:", MRT);
+  let sensorData = lines.map((d) => ({
+    sensor: d.sensor,
+    timeStamp: d.timeStamp,
+  }));
+  let sensor = detectApproachOrDeparture(sensorData);
+  let mostRecent = Math.max(
+    ...Object.keys(sensor).map((key) => parseInt(key, 10))
+  );
+  MRD = sensor[mostRecent];
+
+  let summaryData = sumData(sensor);
+  updateMotionChart(MRD);
+  updateChartI(MRD, summaryData);
+}
+//--------------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------------
+
+// Cleaning Data
+
+function cleanData(data) {
+  console.log("Cleaning up data...");
+  return data
+    .split("\n")
+    .filter((d) => d.trim())
+    .map((d) => JSON.parse(d))
+    .filter((d) => d.creator === "TOF"); //TOF__VL53L0X
+}
 
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -85,6 +131,7 @@ export function detectApproachOrDeparture(dataStream) {
           dataBatch[i] = {};
         }
 
+        // Initialize dataBatch
         let indexStart = i - batch - 1; // Determine batch start index
         dataBatch[i] = {
           batchCount: batch, // Number of nonzero values in batch
@@ -103,13 +150,12 @@ export function detectApproachOrDeparture(dataStream) {
         }
 
         // Compute and store slope using linear regression
-        dataBatch[i]["slope"] = [
-          parseInt(
-            linearRegressionFromArray(dataBatch[i]["sensorReadings"])["slope"]
-          ),
-        ];
+        dataBatch[i]["slope"] = parseInt(
+          linearRegressionFromArray(dataBatch[i]["sensorReadings"])["slope"]
+        );
         dataBatch[i]["TimeStamp"] = dataBatch[i].timeStamps.at(-1);
         dataBatch[i]["Date"] = dataStream[i].timeStamp.slice(0, 10);
+        dataBatch[i]["Movement"] = dataBatch[i]["slope"] > 0 ? 1 : -1;
       }
       // Reset batch tracking variables
       counter = 0;
@@ -162,47 +208,37 @@ export function linearRegressionFromArray(yValues) {
 
 //--------------------------------------------------------------------------------------------------------------------
 
-// Getting fetched Data response
+// Function to sum data by hour by date
 
-// function to call when you've got something to display:
-function getResponse(data) {
-  const lines = cleanData(data);
-  console.log("Data cleaned and ready to use!");
+function sumData(data) {
+  // Grabbing summary data from dataset
 
-  MRT = lines.map((l) => l.timeStamp.slice(11, 19)).at(-1);
-  console.log("MRT:", MRT);
-  let sensorData = lines.map((d) => ({
-    sensor: d.sensor,
-    timeStamp: d.timeStamp,
-  }));
-  let detector = detectApproachOrDeparture(sensorData);
-  let mostRecent = Math.max(
-    ...Object.keys(detector).map((key) => parseInt(key, 10))
-  );
-  MRD = detector[mostRecent];
+  let summary = Object.values(data).map((entry) => [
+    entry.batchCount,
+    entry.Date,
+    entry.TimeStamp.slice(0, 2),
+    entry.Movement,
+  ]);
 
-  //   document.getElementById("result").innerHTML = JSON.stringify(lines, null, 2);
-  //   document.getElementById("result").innerHTML = JSON.stringify(
-  //     lines.map((l) => l.sensor),
-  //     null,
-  //     2
-  //   );
-  // document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
+  // Summing up movement data by hour by date (GPT SUPPORTED LOGIC)
+  const totals = summary.reduce((acc, row) => {
+    const key = `${row[1]} ${row[2]}`;
+    acc[key] = (acc[key] || 0) + row[3]; // Sum values for each key
+    return acc;
+  }, {});
+
+  // Creating an array containing date as first item, time as second item and sum as third item (GPT SUPPORTED LOGIC)
+  let totalsArray = Object.entries(totals).map(([key, sum]) => {
+    const [date, time] = key.split(" ");
+    return [date, time, sum];
+  });
+
+  // console.log("totals", totalsArray);
+  // console.log(summary);
+  return totalsArray;
 }
-//--------------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------------
-
-// Cleaning Data
-
-function cleanData(data) {
-  console.log("Cleaning up data...");
-  return data
-    .split("\n")
-    .filter((d) => d.trim())
-    .map((d) => JSON.parse(d))
-    .filter((d) => Object.keys(d).length > 0);
-}
 
 // This is a listener for the page to load.
 // This is the command that actually starts the script:

@@ -1,50 +1,26 @@
-// Importing data fetched from sensor
-import { MRD } from "./script.js";
-
+let currentDate;
 let currentTime;
-let population = 0;
-let lastCheckIn; // Set Check-in Variable
 const ctx = document.getElementById("movement"); // Get canvas element
 const itx = document.getElementById("inflow");
-const timeLog = {};
+let sensorData = new Array(24).fill(0);
+let dateToDisplay = new Date();
+let prevDayBtn = document.getElementById("prevDay");
+let nextDayBtn = document.getElementById("nextDay");
+let dateDisplay = document.getElementById("dateDisplay");
 
+console.log(sensorData);
 //--------------------------------------------------------------------------------------------------------------------
 
 // Time Clock
+
 function updateTime() {
-  currentTime = new Date().toLocaleTimeString([], { hour12: false });
+  currentDate = new Date().toISOString(); //.toLocaleString([], { hour12: false });
+  currentTime = currentDate.slice(11, 19);
   document.getElementById("current-time").textContent = currentTime; // Set the current time in the #current-time span
 }
 
-// Call updateTime once to set the initial time, then every second
 updateTime(); // Call once immediately
 setInterval(updateTime, 1000); // Update every second
-//--------------------------------------------------------------------------------------------------------------------
-
-// Update Check-in Variable
-lastCheckIn = currentTime;
-
-//--------------------------------------------------------------------------------------------------------------------
-
-// Loading Data
-
-/*
- Asynchronously waits for the MRD object to be populated before proceeding.
- 
- This function continuously checks whether the `MRD` object is defined and has at least one key.
- If `MRD` is undefined or empty, it logs a waiting message and pauses for 1 second before checking again.
- The function will not return until `MRD` is populated.
- 
-@returns {Promise<void>} Resolves once MRD is populated.
-*/
-async function waitForMRD() {
-  while (!MRD || Object.keys(MRD).length === 0) {
-    console.log("Waiting for MRD...");
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second before checking again
-  }
-}
-
-await waitForMRD();
 //--------------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -52,7 +28,7 @@ await waitForMRD();
 //Setting Up Motion Chart
 
 // Function to update the motion detection chart
-function updateMotionChart() {
+export function updateMotionChart(MRD) {
   const motionData = MRD["sensorReadings"]; // Extract sensor readings
 
   // Generate labels as sequential time indices
@@ -100,146 +76,115 @@ function updateMotionChart() {
   }
 }
 
-// Call the function initially
-updateMotionChart();
-
-// Set an interval to update the chart every 5 seconds
-setInterval(updateMotionChart, 5000);
 //--------------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------------
 
-//Setting Up Main Chart
-
-// Intializing dictionary for current sensorData
-for (let hour = 0; hour < 24; hour++) {
-  timeLog[`${hour}:00`] = 0; // Set each hour as key and initialize value as 0
-}
-
-// Preparing sensorData to be pushed to chart
-let sensorData = [];
-for (let hour = 0; hour < 24; hour++) {
-  const hourKey = `${hour}:00`; // Create the key, e.g., "0:00", "1:00"
-  sensorData.push(timeLog[hourKey]); // Push the value of that hour into the data array
-}
-console.log(timeLog);
-
-// Inflow Floor Data Chart
-const chartInstanceI = new Chart(itx, {
-  type: "bar",
-  data: {
-    labels: [
-      "12am",
-      "1am",
-      "2am",
-      "3am",
-      "4am",
-      "5am",
-      "6am",
-      "7am",
-      "8am",
-      "9am",
-      "10am",
-      "11am",
-      "12pm",
-      "1pm",
-      "2pm",
-      "3pm",
-      "4pm",
-      "5pm",
-      "6pm",
-      "7pm",
-      "8pm",
-      "9pm",
-      "10pm",
-      "11pm",
-    ],
-    datasets: [
-      {
-        label: `# of People in North Floor ${currentTime}`,
-        data: sensorData,
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    scales: {
-      x: {
-        grid: {
-          display: false, // Disable vertical grid lines
-        },
-      },
-      y: {
-        grid: {
-          display: true, // Enable horizontal grid lines
-        },
-        beginAtZero: true,
-      },
-    },
-    maintainAspectRatio: false,
-  },
-});
-//--------------------------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------------------------------------
+// Setting Up Main Chart
 
 // Updating chart dynamically with new data
-function updateChart() {
-  console.log("UPDAING THE CHART");
-  console.log("MRD SLICE", Object.keys(MRD));
-  console.log("MRD SLICE", MRD.TimeStamp);
+export function updateChartI(MRD, summary) {
+  // Intializing dictionary for current sensorData
 
-  // Update the `sensorData` array with new readings for current hour
-  // If the current hour is equal the most recent data's hour:
-  if (currentTime.slice(0, 2) === MRD["TimeStamp"].slice(0, 2)) {
-    console.log("Most Recent Data Time Record:", MRD["TimeStamp"]);
-    console.log("Last Check-in:", lastCheckIn);
-
-    // Since our last time check-in, did another person approach?
-    // MRD provides our Most Recent Data for movement detection (non 0 sensor readings)
-
-    // If the time stamp for our Most Recent Data entry is greater than our last check-in
-    // Determine if someone approached or departed.
-
-    if (MRD["TimeStamp"] >= lastCheckIn) {
-      console.log("Time to update!");
-
-      lastCheckIn = currentTime; // Update last check-in
-
-      // Negative slope indicates a person approaching
-      if (MRD["slope"] < 0) {
-        console.log("Somebody Approaching");
-        timeLog[`${Number(currentTime.slice(0, 2))}:00`] += 1;
-        population += 1;
-      }
-
-      // Positive slope indicates a person departing
-      else if (MRD["slope"] > 0) {
-        console.log("Somebody Departing");
-        timeLog[`${Number(currentTime.slice(0, 2))}:00`] -= 1;
-        population -= 1;
-      }
-
-      // Slope of 0 indicates no movement
-      else {
-        timeLog[`${Number(currentTime.slice(0, 2))}:00`] += 0;
-      }
-
-      // Updating sensor record with new movement data
-      sensorData[Number(currentTime.slice(0, 2))] =
-        timeLog[`${Number(currentTime.slice(0, 2))}:00`]; // Update the corresponding sensorData value
-    }
+  const hours = [
+    "12am",
+    "1am",
+    "2am",
+    "3am",
+    "4am",
+    "5am",
+    "6am",
+    "7am",
+    "8am",
+    "9am",
+    "10am",
+    "11am",
+    "12pm",
+    "1pm",
+    "2pm",
+    "3pm",
+    "4pm",
+    "5pm",
+    "6pm",
+    "7pm",
+    "8pm",
+    "9pm",
+    "10pm",
+    "11pm",
+  ];
+  if (window.chartInstanceI) {
+    window.chartInstanceM.data.labels = hours;
+    window.chartInstanceI.data.datasets[0].data = sensorData;
+    window.chartInstanceI.update(); // Refresh chart
+  } else {
+    // Inflow Floor Data Chart
+    window.chartInstanceI = new Chart(itx, {
+      type: "bar",
+      data: {
+        labels: hours,
+        datasets: [
+          {
+            label: `# of People in North Floor ${currentTime}`,
+            data: sensorData,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            grid: {
+              display: false, // Disable vertical grid lines
+            },
+          },
+          y: {
+            grid: {
+              display: true, // Enable horizontal grid lines
+            },
+            beginAtZero: true,
+          },
+        },
+        maintainAspectRatio: true,
+      },
+    });
   }
-  console.log(timeLog);
-  document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
-  document.getElementById("population").innerHTML = population;
 
+  console.log("SUMMARY DATA", summary);
+  console.log("Current Time", currentDate.slice(0, 10));
+
+  for (let i = 0; i < summary.length; i++) {
+    console.log("--------------------");
+    console.log("UPDAING THE CHART");
+    console.log("--------------------");
+    console.log(sensorData[summary[i][2]]);
+    sensorData[Number(summary[i][1])] = summary[i][2] || 0;
+  }
+
+  document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
+  document.getElementById("population").innerHTML = summary.at(-1)[2];
   // Step 3: Update the chart with new data
   //chartInstance.data.datasets[0].label = `# of People in North Floor ${formattedTime}`
   chartInstanceI.update(); // This re-renders the chart with the updated data
+  console.log("Displaying ", dateToDisplay);
 }
 
-updateChart();
-// Simulate calling the update function after some time (e.g., every minute or every new sensor reading)
-setInterval(updateChart, 5000); // Update every 5 seconds for demo purposes
 //--------------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------------
+
+function updateDatePicker() {
+  dateDisplay.textContent = dateToDisplay.toDateString();
+}
+prevDayBtn.addEventListener("click", () => {
+  dateToDisplay.setDate(dateToDisplay.getDate() - 1);
+  console.log("PREV BUTTON CLICKED", dateToDisplay.toISOString().slice(0, 10));
+  updateDatePicker();
+});
+
+nextDayBtn.addEventListener("click", () => {
+  dateToDisplay.setDate(dateToDisplay.getDate() + 1);
+  console.log("Next BUTTON CLICKED", dateToDisplay.toISOString().slice(0, 10));
+  updateDatePicker();
+});
+
+updateDatePicker();

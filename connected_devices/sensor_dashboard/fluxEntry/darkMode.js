@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.body.classList.contains("dark-mode")) {
       localStorage.setItem("dark-mode", "enabled");
       Chart.getChart("inflow").options.scales.y.grid.color =
-        "rgba(255, 255, 255, 0.8)";
+        "rgba(255, 255, 255, 0.5)";
       Chart.getChart("inflow").update();
     } else {
       localStorage.setItem("dark-mode", "disabled");

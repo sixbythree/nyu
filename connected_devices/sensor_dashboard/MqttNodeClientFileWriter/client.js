@@ -38,8 +38,8 @@ const broker = "mqtt://tigoe.net:1883";
 // the path to the data file:
 // let filePath = __dirname + '/data.json';
 let filePath =
-  "/Users/sammyoge/GitHub/nyu/connected_devices/sensor_dashboard/fluxEntry" +
-  "/TOF.json";
+  "/Users/sammyoge/GitHub/nyu/connected_devices/sensor_dashboard" +
+  "/TOF_VL53L0X.json";
 
 // client options:
 const options = {
@@ -52,7 +52,7 @@ const options = {
   reconnectPeriod: 1000,
 };
 // topic:
-let myTopic = "TOF";
+let myTopic = "TOF_VL53L0X";
 
 // connect handler:
 function setupClient() {
