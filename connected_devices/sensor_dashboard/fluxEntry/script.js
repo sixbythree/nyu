@@ -22,7 +22,7 @@ import { updateChartI } from "./scriptChart.js";
 function setup() {
   // set an interval to run fetchText() every 5 seconds:
   fetchText();
-  setInterval(fetchText, 2000);
+  setInterval(fetchText, 4000);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ function fetchText() {
   // make the HTTP/S call:
   // To pull from Tom's data file on his site => https://tigoe.net/data.json
   // fetch("https://tigoe.net/data.json", params)
-  fetch("20250311-TOF.json", params)
+  fetch("TOF.json", params)
     .then((response) => {
       console.log("Fetching data...");
       return response.text();
@@ -155,7 +155,7 @@ export function detectApproachOrDeparture(dataStream) {
         );
         dataBatch[i]["TimeStamp"] = dataBatch[i].timeStamps.at(-1);
         dataBatch[i]["Date"] = dataStream[i].timeStamp.slice(0, 10);
-        dataBatch[i]["Movement"] = dataBatch[i]["slope"] > 0 ? 1 : -1;
+        dataBatch[i]["Movement"] = dataBatch[i]["slope"] > 0 ? -1 : 1;
       }
       // Reset batch tracking variables
       counter = 0;

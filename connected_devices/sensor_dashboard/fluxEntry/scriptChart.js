@@ -7,6 +7,7 @@ let dateToDisplay = new Date();
 let prevDayBtn = document.getElementById("prevDay");
 let nextDayBtn = document.getElementById("nextDay");
 let dateDisplay = document.getElementById("dateDisplay");
+dateDisplay.textContent = dateToDisplay.toISOString().slice(0, 10);
 
 console.log(sensorData);
 //--------------------------------------------------------------------------------------------------------------------
@@ -14,7 +15,7 @@ console.log(sensorData);
 // Time Clock
 
 function updateTime() {
-  currentDate = new Date().toISOString(); //.toLocaleString([], { hour12: false });
+  currentDate = new Date().toLocaleString([], { hour12: false });
   currentTime = currentDate.slice(11, 19);
   document.getElementById("current-time").textContent = currentTime; // Set the current time in the #current-time span
 }
@@ -85,6 +86,8 @@ export function updateMotionChart(MRD) {
 // Updating chart dynamically with new data
 export function updateChartI(MRD, summary) {
   // Intializing dictionary for current sensorData
+  console.log("--------------------");
+  console.log("UPDAING CHARTI");
 
   const hours = [
     "12am",
@@ -149,23 +152,25 @@ export function updateChartI(MRD, summary) {
     });
   }
 
-  console.log("SUMMARY DATA", summary);
-  console.log("Current Time", currentDate.slice(0, 10));
+  // console.log("SUMMARY DATA", summary);
+  // console.log("Current Time", currentDate.slice(0, 10));
 
   for (let i = 0; i < summary.length; i++) {
-    console.log("--------------------");
-    console.log("UPDAING THE CHART");
-    console.log("--------------------");
-    console.log(sensorData[summary[i][2]]);
-    sensorData[Number(summary[i][1])] = summary[i][2] || 0;
+    if (summary[i][0] === dateToDisplay.toISOString().slice(0, 10)) {
+      console.log("There Is Data To Show");
+      sensorData[Number(summary[i][1])] = summary[i][2] || 0;
+    } else {
+      console.log("No Data To Show");
+      sensorData[Number(summary[i][1])] = 0;
+    }
   }
+  // console.log(sensorData);
 
   document.getElementById("result").innerHTML = JSON.stringify(MRD, null, 2);
   document.getElementById("population").innerHTML = summary.at(-1)[2];
-  // Step 3: Update the chart with new data
-  //chartInstance.data.datasets[0].label = `# of People in North Floor ${formattedTime}`
   chartInstanceI.update(); // This re-renders the chart with the updated data
   console.log("Displaying ", dateToDisplay);
+  console.log("--------------------");
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -173,18 +178,16 @@ export function updateChartI(MRD, summary) {
 //--------------------------------------------------------------------------------------------------------------------
 
 function updateDatePicker() {
-  dateDisplay.textContent = dateToDisplay.toDateString();
+  dateDisplay.textContent = dateToDisplay.toISOString().slice(0, 10);
 }
 prevDayBtn.addEventListener("click", () => {
-  dateToDisplay.setDate(dateToDisplay.getDate() - 1);
-  console.log("PREV BUTTON CLICKED", dateToDisplay.toISOString().slice(0, 10));
+  console.log("Left Button Pressed");
+  dateToDisplay.setDate(dateToDisplay.getDate() - 1); // Every time prev button is press, subtract 1 day
   updateDatePicker();
 });
 
 nextDayBtn.addEventListener("click", () => {
-  dateToDisplay.setDate(dateToDisplay.getDate() + 1);
-  console.log("Next BUTTON CLICKED", dateToDisplay.toISOString().slice(0, 10));
+  console.log("Right Button Pressed");
+  dateToDisplay.setDate(dateToDisplay.getDate() + 1); // Every time next button is press, add 1 day
   updateDatePicker();
 });
-
-updateDatePicker();

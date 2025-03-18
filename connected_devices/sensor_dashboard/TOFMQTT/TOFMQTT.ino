@@ -41,7 +41,7 @@ MqttClient mqttClient(wifi);
 // details for MQTT client:
 char broker[] = "tigoe.net";
 int port = 1883;
-char topic[] = "TOF_VL53L0X";
+char topic[] = "TOF"; //_VL53L0X";
 String clientID = "arduinoMqttClient-";  // ?????Why is the client id arduinoMqttClient-?
 
 // last time the client sent a message, in ms:
