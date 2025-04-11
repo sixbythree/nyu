@@ -1,0 +1,246 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: Inter, sans-serif !important;
+  line-height: 1.22 !important; /* Adjust for better readability */
+}
+
+#riosVideo {
+  border-radius: 20px;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: white;
+}
+
+.page-background {
+  width: 1042px;
+  height: 2700px;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  background: #d9d9d9;
+  margin: 0 auto;
+}
+
+header {
+  width: 874px;
+  height: 551px;
+  position: absolute;
+  top: 76px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.page-title-section {
+  display: flex;
+  align-items: center;
+  width: 874px;
+  height: 550px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+}
+
+.page-title-text {
+  width: 555px;
+  height: 550px;
+  position: absolute;
+  top: 0px;
+  left: 319px;
+}
+
+.page-title {
+  width: 555px;
+  height: 213px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  color: black;
+  font-size: 96px;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.page-title-description {
+  width: 555px;
+  left: 5px;
+  top: 252px;
+  position: absolute;
+  color: black;
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 250;
+  word-wrap: break-word;
+}
+
+.divider {
+  width: 874px;
+  height: 0px;
+  position: relative;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  border-top: 0.5px solid black;
+}
+
+#line-1 {
+  top: 600px;
+  margin: top;
+}
+
+#line-2 {
+  top: 1021px;
+}
+
+.page-mid {
+  width: 100%;
+  height: 1021px;
+  position: absolute;
+  top: 730px;
+  margin: 0 auto;
+}
+
+.video-testimonials-section {
+  width: 875px;
+  height: 945px;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.video-testimonials-title {
+  width: 679px;
+  height: 31px;
+  left: 98px;
+  top: 0px;
+  position: absolute;
+  text-align: center;
+  color: black;
+  font-size: 24px;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.video-testimonials {
+  width: 875px;
+  height: 850px;
+  position: absolute;
+  top: 95px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+video {
+  border-radius: 20px;
+  background: #d9d9d9;
+}
+
+#vid1,
+#vid5,
+#vid9,
+#vid16 {
+  width: 149px;
+  height: 146px;
+}
+
+#vid2,
+#vid4,
+#vid17 {
+  width: 149px;
+  height: 145px;
+}
+#vid3,
+#vid6,
+#vid7,
+#vid8,
+#vid11,
+#vid12,
+#vid13,
+#vid14,
+#vid15,
+#vid18 {
+  width: 148px;
+  height: 145px;
+}
+
+#vid10 {
+  width: 148px;
+  height: 144px;
+}
+
+.testimonials-section {
+  width: 819px;
+  height: 850px;
+  position: absolute;
+  top: 1800px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.testimonial-title {
+  left: 337px;
+  top: 0px;
+  position: absolute;
+  text-align: center;
+  color: black;
+  font-size: 24px;
+  font-family: Inter;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.testimonial-text {
+  width: 819px;
+  height: 700px;
+  left: 0px;
+  top: 65px;
+  position: absolute;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 64px;
+  display: inline-flex;
+}
+
+.testimonial-text-item {
+  align-self: stretch;
+  text-align: center;
+  color: black;
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 250;
+  word-wrap: break-word;
+}
+
+.slideshow {
+  width: 600px;
+  height: 500px;
+  position: relative;
+  top: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+  visibility: hidden;
+}
+
+.d-block.w-100 {
+  border-radius: 20px;
+}
