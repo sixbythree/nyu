@@ -38,21 +38,21 @@ const broker = "mqtt://tigoe.net:1883";
 // the path to the data file:
 // let filePath = __dirname + '/data.json';
 let filePath =
-  "/Users/sammyoge/GitHub/nyu/connected_devices/sensor_dashboard" +
-  "/TOF_VL53L0X.json";
+  "/Users/sammyoge/GitHub/nyu/connected_devices/sensor_dashboard/fluxEntry/" +
+  "/TOF.json"; //_VL53L0X.json";
 
 // client options:
 const options = {
   // add the current epoch time for a unique clientId:
   clientId: "nodeClient-" + Date.now(),
-  username: "*******",
-  password: "******",
+  username: "conndev",
+  password: "b4s1l!",
   clean: true,
   connectTimeout: 4000,
   reconnectPeriod: 1000,
 };
 // topic:
-let myTopic = "TOF_VL53L0X";
+let myTopic = "TOF"; //_VL53L0X";
 
 // connect handler:
 function setupClient() {

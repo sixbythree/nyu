@@ -81,8 +81,9 @@ function getResponse(data) {
   MRD = sensor[mostRecent];
 
   let summaryData = sumData(sensor);
+  console.log(summaryData);
   updateMotionChart(MRD);
-  updateChartI(MRD, summaryData);
+  updateChartI(MRD, summaryData[0], summaryData[1]);
 }
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -233,9 +234,36 @@ function sumData(data) {
     return [date, time, sum];
   });
 
-  // console.log("totals", totalsArray);
-  // console.log(summary);
-  return totalsArray;
+  // Summing up movement data by hour by date
+  const subTotals = summary.reduce((acc, row) => {
+    const key = `${row[1]} ${row[2]}`;
+    acc[key + " In"] = (acc[key + " In"] || 0) + (row[3] > 0 ? row[3] : 0); // If row[3] is positive, somebody has enter the floor
+    acc[key + " Out"] = (acc[key + " Out"] || 0) + (row[3] < 0 ? row[3] : 0); // If row[3] is negative, somebody has exited the floor
+    return acc;
+  }, {});
+
+  // Convert object to structured array GPT assistted
+  const subTotalsArray = Object.entries(subTotals).reduce(
+    (acc, [key, value]) => {
+      const [date, hour, movement] = key.split(" "); // Extract date, hour, and movement type
+      const keyId = `${date} ${hour}`; // Unique key for grouping
+
+      if (!acc[keyId]) {
+        acc[keyId] = [date, hour, "In", 0, "Out", 0]; // Default structure
+      }
+
+      if (movement === "In") {
+        acc[keyId][3] += value; // Store 'In' value
+      } else if (movement === "Out") {
+        acc[keyId][5] += value; // Store 'Out' value
+      }
+
+      return acc;
+    },
+    {}
+  );
+
+  return [totalsArray, Object.values(subTotalsArray)];
 }
 
 //--------------------------------------------------------------------------------------------------------------------
