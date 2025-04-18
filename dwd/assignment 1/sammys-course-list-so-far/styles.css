@@ -1,0 +1,23 @@
+body {
+  background-color: #ff4100;
+  font-family: "Inter", sans-serif;
+}
+
+#courses {
+  padding: 50px;
+}
+
+.spacer {
+  height: 25px;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+#itp-logo {
+  display: block;
+  width: 12%;
+  height: auto;
+  margin-left: 0;
+}
