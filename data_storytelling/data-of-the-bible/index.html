@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data of the Bible</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Data of the Bible</h1>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Books</a>
+        <a href="#">Stats</a>
+        <a href="#">Insights</a>
+        <a href="#">Questions</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h2>What insights are hidden in the structure of the Bible?</h2>
+      <div class="quick-stats">
+        <div><strong>66</strong><br />Books</div>
+        <div><strong>1,189</strong><br />Chapters</div>
+        <div><strong>31,102</strong><br />Verses</div>
+        <div><strong>783,137</strong><br />Words</div>
+      </div>
+    </section>
+
+    <section class="toggle-view">
+      <div class="view-controls">
+        <button id="gridBtn" onclick="showGrid()" aria-label="Grid View">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1" ry="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1" ry="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1" ry="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1" ry="1"></rect>
+          </svg>
+        </button>
+        <div class="divider"></div>
+        <button id="listBtn" onclick="showList()" aria-label="List View">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <circle cx="4" cy="6" r="1"></circle>
+            <circle cx="4" cy="12" r="1"></circle>
+            <circle cx="4" cy="18" r="1"></circle>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <section id="display" class="grid">
+      <!-- JavaScript populates here -->
+    </section>
+
+    <section class="questions">
+      <h3>Questions to Explore</h3>
+      <ul>
+        <li>Who are all the contributors? (2 Timothy 4:16)</li>
+        <li>What is the timeline of the Bible?</li>
+        <li>How many names are in the Bible?</li>
+        <li>What is the most common name in the Bible?</li>
+        <li>What is the most common starting letter for names?</li>
+        <li>How many men vs. women are in the Bible?</li>
+      </ul>
+    </section>
+
+    <footer>
+      📖 Bible References | 📊 Data Sources | ✉️ Contact/Feedback<br />
+      ⚡ Built with love for data and scripture
+    </footer>
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <h2 id="bookName"></h2>
+        <p id="chapterCount"></p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
