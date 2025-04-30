@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flux ITP Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f7;
+      color: #222;
+    }
+    header {
+      background: #000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+      padding: 20px;
+    }
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .population-circle {
+      width: 100px;
+      height: 100px;
+      background: #a7d8ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .summary-box {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .summary-box div {
+      text-align: center;
+    }
+    .alert {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 15px;
+      text-align: center;
+    }
+    .timestamp {
+      text-align: right;
+      font-size: 12px;
+      margin-top: 10px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Flux ITP</h1>
+    <p>Live Monitoring Dashboard for Floor Population</p>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <div class="title">Most Recent Data</div>
+      <canvas id="lineChart"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="title">Floor Population</div>
+      <div class="population-circle">5</div>
+      <div class="alert">Near Capacity Threshold</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Daily Summary</div>
+      <div class="summary-box">
+        <div><strong>Entries</strong><br>25</div>
+        <div><strong>Exits</strong><br>20</div>
+        <div><strong>Net</strong><br>+5</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">Hourly Flux</div>
+      <canvas id="barChart"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="title">Sensor Health</div>
+      <ul>
+        <li>Uptime: 99.7%</li>
+        <li>Last Check-in: 10:04:37 AM</li>
+        <li>Status: Online</li>
+      </ul>
+      <div class="timestamp">Updated: 10:04:37 AM</div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx1 = document.getElementById('lineChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ['T1', 'T2', 'T3'],
+        datasets: [{
+          label: 'Motion Detection Readings',
+          data: [270, 86, 61],
+          borderColor: '#007bff',
+          backgroundColor: 'rgba(0,123,255,0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    const ctx2 = document.getElementById('barChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['8pm', '9pm'],
+        datasets: [
+          {
+            label: '# People Entering',
+            data: [5, 20],
+            backgroundColor: '#6cc1ff'
+          },
+          {
+            label: '# People Exiting',
+            data: [15, 10],
+            backgroundColor: '#f7a6b0'
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
