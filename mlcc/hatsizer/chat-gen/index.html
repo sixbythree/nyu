@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HatSizer</title>
+    <link href="./styles.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="flex flex-col items-center justify-center text-center p-4 min-h-screen"
+  >
+    <!-- Screen Container -->
+    <div id="step1" class="flex flex-col items-center">
+      <h1 class="text-3xl font-bold mb-4">HatSizer</h1>
+      <p class="mb-4">Place your head inside the oval</p>
+      <div
+        class="relative w-80 h-64 border-4 border-white rounded-xl overflow-hidden mb-4"
+      >
+        <video
+          id="webcam"
+          autoplay
+          playsinline
+          class="w-full h-full object-cover"
+        ></video>
+        <div class="absolute inset-0 flex justify-center items-center">
+          <div
+            class="w-40 h-52 border-4 border-dashed border-white rounded-full"
+          ></div>
+        </div>
+      </div>
+      <button
+        onclick="startScan()"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Start Scan
+      </button>
+    </div>
+
+    <div id="step2" class="hidden flex flex-col items-center">
+      <p class="text-xl mb-6">Analyzing...</p>
+      <div
+        class="w-40 h-40 border-4 border-white rounded-full animate-spin border-t-transparent"
+      ></div>
+    </div>
+
+    <div id="step3" class="hidden flex flex-col items-center">
+      <h2 class="text-2xl font-bold mb-2">
+        🎉 Hat Size: <span id="hatSize">57.2 cm (M)</span>
+      </h2>
+      <div class="relative w-40 h-52 bg-white rounded-full mb-4">
+        <div
+          class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-3 py-1 rounded-full shadow"
+        >
+          57.2 cm
+        </div>
+        <div
+          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-1 rounded-full"
+        >
+          🧢 Hat
+        </div>
+      </div>
+      <p class="text-sm text-gray-700">
+        Great fit for fedoras, caps, and more!
+      </p>
+    </div>
+
+    <!-- Confetti Layer -->
+    <div id="confetti"></div>
+
+    <script>
+      const webcam = document.getElementById("webcam");
+      const step1 = document.getElementById("step1");
+      const step2 = document.getElementById("step2");
+      const step3 = document.getElementById("step3");
+      const confetti = document.getElementById("confetti");
+
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          webcam.srcObject = stream;
+        })
+        .catch((err) => {
+          alert("Webcam access denied: " + err.message);
+        });
+
+      function startScan() {
+        step1.classList.add("hidden");
+        step2.classList.remove("hidden");
+
+        setTimeout(() => {
+          step2.classList.add("hidden");
+          step3.classList.remove("hidden");
+          triggerConfetti();
+        }, 3000); // Simulate 3 seconds scan
+      }
+
+      function triggerConfetti() {
+        confetti.style.display = "block";
+        for (let i = 0; i < 50; i++) {
+          const dot = document.createElement("div");
+          dot.className = "dot";
+          dot.style.left = Math.random() * 100 + "%";
+          dot.style.top = Math.random() * 100 + "%";
+          dot.style.setProperty("--x", `${(Math.random() - 0.5) * 200}px`);
+          dot.style.setProperty("--y", `${(Math.random() - 0.5) * 200}px`);
+          confetti.appendChild(dot);
+          setTimeout(() => dot.remove(), 1000);
+        }
+      }
+    </script>
+  </body>
+</html>
