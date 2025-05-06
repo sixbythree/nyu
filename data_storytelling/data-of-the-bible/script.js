@@ -1,32 +1,32 @@
 const books = [
-  { name: "Genesis", chapters: 50 },
-  { name: "Exodus", chapters: 40 },
-  { name: "Leviticus", chapters: 27 },
-  { name: "Numbers", chapters: 36 },
-  { name: "Deuteronomy", chapters: 34 },
-  { name: "Joshua", chapters: 24 },
-  { name: "Judges", chapters: 21 },
-  { name: "Ruth", chapters: 4 },
-  { name: "1 Samuel", chapters: 31 },
-  { name: "2 Samuel", chapters: 24 },
-  { name: "1 Kings", chapters: 22 },
-  { name: "2 Kings", chapters: 25 },
-  { name: "1 Chronicles", chapters: 29 },
-  { name: "2 Chronicles", chapters: 36 },
-  { name: "Ezra", chapters: 10 },
-  { name: "Nehemiah", chapters: 13 },
-  { name: "Esther", chapters: 10 },
-  { name: "Job", chapters: 42 },
-  { name: "Psalms", chapters: 150 },
-  { name: "Proverbs", chapters: 31 },
-  { name: "Ecclesiastes", chapters: 12 },
-  { name: "Song of Solomon", chapters: 8 },
-  { name: "Isaiah", chapters: 66 },
-  { name: "Jeremiah", chapters: 52 },
-  { name: "Lamentations", chapters: 5 },
-  { name: "Ezekiel", chapters: 48 },
-  { name: "Daniel", chapters: 12 },
-  { name: "Hosea", chapters: 14 },
+  { name: "Genesis", chapters: 50, words: 38519, letters: 151837 },
+  { name: "Exodus", chapters: 40, words: 32767, letters: 131762 },
+  { name: "Leviticus", chapters: 27, words: 24621, letters: 98916 },
+  { name: "Numbers", chapters: 36, words: 33765, letters: 140862 },
+  { name: "Deuteronomy", chapters: 34, words: 28402, letters: 113984 },
+  { name: "Joshua", chapters: 24, words: 18866, letters: 78362 },
+  { name: "Judges", chapters: 21, words: 19006, letters: 76834 },
+  { name: "Ruth", chapters: 4, words: 2583, letters: 9999 },
+  { name: "1 Samuel", chapters: 31, words: 25145, letters: 100193 },
+  { name: "2 Samuel", chapters: 24, words: 20538, letters: 81743 },
+  { name: "1 Kings", chapters: 22, words: 24588, letters: 98689 },
+  { name: "2 Kings", words: 23590, letters: 93614 },
+  { name: "1 Chronicles", chapters: 29, words: 20414, letters: 86607 },
+  { name: "2 Chronicles", chapters: 36, words: 26123, letters: 109279 },
+  { name: "Ezra", chapters: 10, words: 7453, letters: 31701 },
+  { name: "Nehemiah", chapters: 13, words: 10497, letters: 44697 },
+  { name: "Esther", chapters: 10, words: 5712, letters: 23726 },
+  { name: "Job", chapters: 42, words: 18098, letters: 73131 },
+  { name: "Psalms", chapters: 150, words: 42731, letters: 173920 },
+  { name: "Proverbs", chapters: 31, words: 14668, letters: 60881 },
+  { name: "Ecclesiastes", chapters: 12, words: 5590, letters: 21968 },
+  { name: "Song of Solomon", chapters: 8, words: 2668, letters: 10540 },
+  { name: "Isaiah", chapters: 66, words: 37333, letters: 152015 },
+  { name: "Jeremiah", chapters: 52, words: 42729, letters: 174337 },
+  { name: "Lamentations", chapters: 5, words: 3413, letters: 14165 },
+  { name: "Ezekiel", chapters: 48, words: 40102, letters: 162635 },
+  { name: "Daniel", chapters: 12, words: 11631, letters: 48443 },
+  { name: "Hosea", chapters: 14, words: 5175, letters: 21119 },
   { name: "Joel", chapters: 3 },
   { name: "Amos", chapters: 9 },
   { name: "Obadiah", chapters: 1 },
@@ -41,7 +41,7 @@ const books = [
   { name: "Matthew", chapters: 28 },
   { name: "Mark", chapters: 16 },
   { name: "Luke", chapters: 24 },
-  { name: "John", chapters: 21 },
+  { name: "John", chapters: 21, words: 21440, letters: 84858 },
   { name: "Acts", chapters: 28 },
   { name: "Romans", chapters: 16 },
   { name: "1 Corinthians", chapters: 16 },
@@ -67,9 +67,15 @@ const books = [
   { name: "Revelation", chapters: 22 },
 ];
 
-function openModal(book, chapters) {
+function openModal(book, chapters, words, letters) {
   document.getElementById("bookName").innerText = book;
   document.getElementById("chapterCount").innerText = chapters + " Chapters";
+  document.getElementById("bookWords").innerText = `Words: ${Number(
+    words
+  ).toLocaleString()}`;
+  document.getElementById("bookLetters").innerText = `Letters: ${Number(
+    letters
+  ).toLocaleString()}`;
   document.getElementById("myModal").style.display = "block";
 }
 
@@ -88,11 +94,12 @@ function showGrid() {
   display.innerHTML = books
     .map(
       (book) =>
-        `<div onclick="openModal('${book.name}', ${book.chapters})">${book.name}</div>`
+        `<div onclick="openModal('${book.name}', ${book.chapters}, ${book.words}, ${book.letters})">${book.name}</div>`
     )
     .join("");
   document.getElementById("gridBtn").classList.add("active");
   document.getElementById("listBtn").classList.remove("active");
+  document.getElementById("textBtn").classList.remove("active");
 }
 
 function showList() {
@@ -101,11 +108,35 @@ function showList() {
   display.innerHTML = books
     .map(
       (book) =>
-        `<div onclick="openModal('${book.name}', ${book.chapters})"><span class='book-name'>${book.name}</span><span class='chapter-count'>${book.chapters} Chapters</span></div>`
+        `<div onclick="openModal('${book.name}', ${book.chapters}, ${book.words}, ${book.letters})")"><span class='book-name'>${book.name}</span><span class='chapter-count'>${book.chapters} Chapters</span></div>`
     )
     .join("");
   document.getElementById("listBtn").classList.add("active");
   document.getElementById("gridBtn").classList.remove("active");
+  document.getElementById("textBtn").classList.remove("active");
+  document.getElementById("threeCloud").style.display = "none";
+}
+
+function showText() {
+  const display = document.getElementById("display");
+  display.className = "text";
+  display.innerHTML = "";
+  fetch("bible_text.txt") // relative path, same folder as index.html
+    .then((response) => response.text())
+    .then((data) => {
+      display.innerHTML = `
+        <div id="wordDisplay" style="
+          width: 80%;
+          margin: 20px auto;
+          font-family: sans-serif;
+          font-size: 0.5rem;
+          white-space: pre-wrap;
+        ">${data}</div>`;
+    });
+  document.getElementById("textBtn").classList.add("active");
+  document.getElementById("listBtn").classList.remove("active");
+  document.getElementById("gridBtn").classList.remove("active");
+  document.getElementById("threeCloud").style.display = "none";
 }
 
 showGrid(); // default start

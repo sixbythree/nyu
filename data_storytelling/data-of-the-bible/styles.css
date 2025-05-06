@@ -14,6 +14,10 @@ header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+header h1 {
+  margin-bottom: 0px;
+}
+
 nav {
   margin-top: 10px;
 }
@@ -34,13 +38,14 @@ nav a {
 }
 
 .quick-stats {
-  margin-top: 20px;
+  margin-top: 0px;
+  margin-bottom: 20px;
 }
 
 .quick-stats div {
   display: inline-block;
   margin: 10px 20px;
-  font-size: 18px;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -202,6 +207,15 @@ footer {
   text-decoration: none;
 }
 
+#wordDisplay {
+  width: 80%;
+  margin: 20px auto;
+  font-family: sans-serif;
+  font-size: 0.5rem;
+  /* line-height: 1.5; */
+  white-space: pre-wrap; /* preserve spacing & line breaks */
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -223,4 +237,12 @@ footer {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+#cloudContainer canvas {
+  background: #ffffff;
+}
+
+#threeCloud {
+  min-height: 600px;
 }
