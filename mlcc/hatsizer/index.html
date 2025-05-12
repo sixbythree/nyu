@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
+    <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="content">
+      <main></main>
+      <h1>HatSizer</h1>
+
+      <div class="select-wrapper">
+        <label for="modeSelect">🎨 Pixelation Mode:</label>
+        <select id="modeSelect" onchange="pixelMode = this.value">
+          <option value="2-color">2-Color</option>
+          <option value="3-color">3-Color</option>
+          <option value="16-color" selected>16-Color</option>
+          <option value="full-color">Full Color</option>
+        </select>
+      </div>
+
+      <div id="step1" class="">
+        <div id="canvas-wrapper" class="scan-container"></div>
+        <button onclick="startScan(); captureSnapshot();">Start Scan</button>
+      </div>
+
+      <div id="step2" class="hidden">
+        <p class="analyzing">Analyzing...</p>
+        <div class="spinner"></div>
+      </div>
+
+      <div id="step3" class="hidden mt-6">
+        <div class="result-snapshot">
+          <canvas id="snapshot" class="pixelated"></canvas>
+          <div id="myHatSize" class="result-label">57.2 cm</div>
+          <div class="hat-overlay-wrapper"></div>
+        </div>
+        <h2 class="estimate">🧢 You are a probably a Medium</h2>
+        <button onclick="resetScan()" class="mt-4">New Scan</button>
+      </div>
+
+      <div id="confetti"></div>
+      <video id="webcam" autoplay playsinline style="display: none"></video>
+      <script src="sketch.js"></script>
+      <script src="testing.js"></script>
+    </div>
+  </body>
+</html>
